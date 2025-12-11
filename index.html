@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <title>笨寶今天要吃什麼</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        button {
+            padding: 8px 18px;
+            margin: 5px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            cursor: pointer;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+        }
+
+        #editor-container {
+            max-width: 480px;
+            margin: auto;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>笨寶今天要吃什麼</h1>
+
+    <div id="result">按下面抽籤！</div>
+    <button onclick="drawFood()">抽籤！！</button>
+
+    <div id="list">
+        <div>不准挑食：</div>
+        <div id="foods-text"></div>
+    </div>
+
+    <div id="editor-container">
+        <p>不准刪掉青菜</p>
+        <textarea id="options-input"></textarea><br>
+        <button onclick="updateFoods()">更新菜單</button>
+    </div>
+
+    <script>
+        let foods = [
+            "麥當勞",
+            "炸雞",
+            "加州捲",
+            "牛肉麵",
+            "火鍋",
+            "壽司",
+            "潤餅",
+            "滷味",
+            "義大利麵",
+            "鹹酥雞",
+            "拉麵",
+            "水餃",
+            "青菜"   // 🔒 最重要的！初始就加進來
+        ];
+
+        function refreshDisplay() {
+            document.getElementById("foods-text").textContent = foods.join("、");
+            document.getElementById("options-input").value = foods.join("\n");
+        }
+
+        refreshDisplay();
+
+        function drawFood() {
+            const index = Math.floor(Math.random() * foods.length);
+            const choice = foods[index];
+            document.getElementById("result").textContent = "笨寶今天吃：" + choice;
+        }
+
+        // 🔒 青菜永遠存在
+        function updateFoods() {
+            const text = document.getElementById("options-input").value;
+            const lines = text.split("\n");
+
+            let cleaned = lines
+                .map(item => item.trim())
+                .filter(item => item.length > 0);
+
+            // 強制加入青菜
+            if (!cleaned.includes("青菜")) {
+                cleaned.push("青菜");
+            }
+
+            foods = cleaned;
+            refreshDisplay();
+            document.getElementById("result").textContent = "菜單已更新";
+        }
+    </script>
+
+</body>
+
+</html>
